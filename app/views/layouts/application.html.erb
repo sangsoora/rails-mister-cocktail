@@ -10,8 +10,12 @@
   </head>
 
   <body>
-    <%= yield %>
-    <%= javascript_include_tag "application" %>
-    <%= javascript_pack_tag "application" %>
+    <%= render 'shared/navbar' %>
+    <div class="container text-center">
+      <%= render 'shared/search_form' %>
+      <%= yield %>
+      <%= javascript_include_tag "application" %>
+      <%= javascript_pack_tag "application" %>
+    </div>
   </body>
 </html>
