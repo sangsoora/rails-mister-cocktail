@@ -1,10 +1,98 @@
-<h1><%= @cocktail.name %></h1>
-<ul>
-  <% @cocktail.doses.each do |dose| %>
-    <li>
-      <p><%= dose.ingredient.name %> - <%= dose.description %> - <%= link_to 'Delete Dose', dose_path(dose), method: :delete, data: { confirm: "Are you sure to delete #{dose.ingredient.name}?"}, class: 'btn btn-danger' %></p>
-    </li>
-  <% end %>
-</ul>
-<%= link_to '+ Add New Dose', new_cocktail_dose_path(@cocktail), class: "btn btn-primary" %>
-<%= link_to 'Back to List', cocktails_path, class: 'btn btn-warning' %>
+<div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(https://source.unsplash.com/1600x900/?cocktail)">
+  <h1 class="card-title"><%= @cocktail.name %>
+
+    <%= link_to '', data: { toggle: "modal", target: "#cocktailEditModal" } do %> <i class="fas fa-pen"></i> <% end %>
+    <%= link_to cocktail_path(@cocktail), method: :delete, data: { confirm: "Are you sure to delete #{@cocktail.name}?"} do %> <i class="far fa-trash-alt"></i> <% end %>
+  </h1>
+</div>
+<div class="row py-4">
+  <div class="col-6 text-left">
+    <% if @cocktail.doses == [] %>
+      <h3><em><span style="color: grey">No ingredient yet!</span></em></h3>
+    <% else %>
+      <ul>
+        <% @cocktail.doses.each do |dose| %>
+          <li>
+            <p><strong><%= dose.ingredient.name %></strong> -
+              <%= dose.description %> <%= link_to dose_path(dose), method: :delete, data: { confirm: "Are you sure to delete #{dose.ingredient.name}?"} do %> <i class="far fa-trash-alt"></i> <% end %>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+  <div class="col-6 text-left">
+    <h3>Add a new ingredient!</h3>
+    <%= simple_form_for [@cocktail, @dose] do |f| %>
+      <%= f.association :ingredient, collection: Ingredient.order(:name), prompt: "Choose an Ingredient" %>
+      <%= f.input :description %>
+      <%= f.submit value: 'Add Ingredient', class: 'btn btn-gradient' %>
+    <% end %>
+  </div>
+</div>
+<div class="row py-4 text-left">
+  <div class="col-12">
+    <h3>Reviews!</h3>
+    <% if @reviews == [] %>
+      <p><em><span style="color: grey">No review yet!</span></em></p>
+    <% else %>
+      <ul>
+        <% @reviews.each do |review| %>
+          <li><p><% review.rating.times { %> <i class="fas fa-star"></i> <% } %> - <%= review.content %>
+            <%= link_to review_path(review), method: :delete, data: { confirm: "Are you sure to delete this review?"} do %> <i class="far fa-trash-alt"></i> <% end %></p>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+    <button type="button" class="btn btn-gradient" data-toggle="modal" data-target="#reviewModal">Add a review</button>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-6">
+    <%= link_to 'Back to List', root_path, class: 'btn btn-ghost' %>
+  </div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel">Create review</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <%= simple_form_for [@cocktail, @review] do |f| %>
+          <%= f.input :rating, collection: [0, 1, 2, 3, 4, 5]  %>
+          <%= f.input :content %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-dismiss="modal">Close</button>
+        <%= f.submit class: 'btn btn-gradient' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="cocktailEditModal" tabindex="-1" role="dialog" aria-labelledby="cocktailEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cocktailEditModalLabel">Edit Cocktail</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <%= simple_form_for [@cocktail] do |f| %>
+          <%= f.input :name %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-dismiss="modal">Close</button>
+        <%= f.submit class: 'btn btn-gradient' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

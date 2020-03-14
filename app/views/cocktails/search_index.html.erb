@@ -1,0 +1,33 @@
+<h2>Search result for: <em><span style="color: lightblue"><%= params[:query] %></span></em></h2>
+
+<% if @cocktails.length == 0 %>
+  <div class="flash flash-danger alert alert-dismissible fade show" role="alert">
+    <span><strong>Oops!</strong> 😱 There is no result matching <%= params[:query] %>! Try again!!</span>
+    <a data-dismiss="alert" aria-label="Close">
+      <i class="fas fa-times"></i>
+    </a>
+  </div>
+<% else %>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="cards">
+        <% @cocktails.each do |cocktail| %>
+            <div class="card" style="width: 24rem;">
+              <img class="card-img-top" src="..." alt="Card image cap">
+              <div class="card-body">
+                <h2 class="card-title"><%= link_to cocktail.name, cocktail_path(cocktail) %></h2>
+                <% cocktail.doses.each do |dose| %>
+                  <p class="card-text"><%= dose.ingredient.name %> - <%= dose.description %></p>
+                <% end %>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="row justify-content-center py-4">
+  <div class="col-8">
+    <%= link_to 'Back to the list', new_cocktail_path %>
+  </div>
+</div>

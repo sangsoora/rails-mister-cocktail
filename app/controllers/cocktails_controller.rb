@@ -1,14 +1,15 @@
 class CocktailsController < ApplicationController
-  before_action :set_cocktail, only: %i[show edit update destroy]
+  before_action :set_cocktail, only: %i[show update destroy]
+  before_action :new_cocktail, only: %i[index show search_index]
   def index
     @cocktails = Cocktail.all
   end
 
   def show
-  end
-
-  def new
-    @cocktail = Cocktail.new
+    @doses = Dose.where(cocktail_id: params[:id])
+    @dose = Dose.new
+    @reviews = Review.where(cocktail_id: params[:id])
+    @review = Review.new
   end
 
   def create
@@ -20,8 +21,6 @@ class CocktailsController < ApplicationController
     end
   end
 
-  def edit; end
-
   def update
     if @cocktail.update(cocktail_params)
       redirect_to cocktail_path(@cocktail)
@@ -32,7 +31,21 @@ class CocktailsController < ApplicationController
 
   def destroy
     @cocktail.destroy
-    redirect_to cocktails_path
+    redirect_to root_path
+  end
+
+  def search
+    if params[:search][:query] != ""
+      @search = params[:search][:query]
+      @cocktails = Cocktail.where('name ILIKE ?', "%#{params[:search][:query]}%")
+      redirect_to search_result_path(params[:search][:query])
+    else
+      redirect_to request.referrer
+    end
+  end
+
+  def search_index
+    @cocktails = Cocktail.where('name ILIKE ?', "%#{params[:query]}%")
   end
 
   private
@@ -41,7 +54,12 @@ class CocktailsController < ApplicationController
     @cocktail = Cocktail.find(params[:id])
   end
 
+  def new_cocktail
+    @new_cocktail = Cocktail.new
+  end
+
   def cocktail_params
+    params[:cocktail][:name].capitalize!
     params.require(:cocktail).permit(:name)
   end
 end

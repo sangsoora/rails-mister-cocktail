@@ -10,3 +10,11 @@
 .navbar-lewagon .navbar-brand img {
   width: 40px;
 }
+.nav-item .btn-ghost {
+  color: #167FFB;
+  opacity: 0.7;
+  &:hover {
+    color: #167FFB;
+    opacity: 1;
+  }
+}
