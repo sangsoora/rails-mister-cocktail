@@ -39,6 +39,7 @@
       <div class="modal-body text-left">
         <%= simple_form_for @new_cocktail do |f| %>
           <%= f.input :name %>
+          <%= f.input :photo, as: :file %>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-ghost" data-dismiss="modal">Close</button>

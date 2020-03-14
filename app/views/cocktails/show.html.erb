@@ -1,4 +1,4 @@
-<div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(https://source.unsplash.com/1600x900/?cocktail)">
+<div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= cl_image_path @cocktail.photo.key, crop: :fill %>')">
   <h1 class="card-title"><%= @cocktail.name %>
 
     <%= link_to '', data: { toggle: "modal", target: "#cocktailEditModal" } do %> <i class="fas fa-pen"></i> <% end %>
@@ -86,6 +86,7 @@
       <div class="modal-body text-left">
         <%= simple_form_for [@cocktail] do |f| %>
           <%= f.input :name %>
+          <%= f.input :photo, as: :file %>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-ghost" data-dismiss="modal">Close</button>
