@@ -1,4 +1,4 @@
-<h2>Search result for: <em><span style="color: lightblue"><%= params[:query] %></span></em></h2>
+<h2><span style="color: grey">Search result for: </span><em><span style="color: lightblue"><%= params[:query] %></span></em></h2>
 
 <% if @cocktails.length == 0 %>
   <div class="flash flash-danger alert alert-dismissible fade show" role="alert">
@@ -32,6 +32,6 @@
 <% end %>
 <div class="row justify-content-center py-4">
   <div class="col-8">
-    <%= link_to 'Back to the list', root_path %>
+    <%= link_to 'Back to List', root_path, class: 'btn btn-ghost' %>
   </div>
 </div>
